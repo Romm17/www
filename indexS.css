@@ -1,0 +1,15 @@
+#header {
+background-color: #EEEE00;
+padding: 5px;
+}
+#header h1{
+text-align:center;
+}
+
+#main {
+width: 900px;
+min-height: 500px;
+margin: 2px auto;
+padding:5px;
+background-color: #CCCCCC;
+}
