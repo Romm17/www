@@ -1,59 +1,7 @@
 ﻿window.onload = function() {
-	var fieldAllTable = document.createElement('table');
-
-	var tr = document.createElement('tr');
-	for (var t=0; t<11; t++) {
-		var td = document.createElement('td');
-		td.align="center"
-		td.innerHTML = ' ABCDEFGHIK'.charAt(t)
-		tr.appendChild(td);
-	}
-	fieldAllTable.appendChild(tr);
 	
-	for (var t=1; t<11; t++) {
-		var tr = document.createElement('tr');
-		var td = document.createElement('td');
-		
-		td.innerHTML = t;
 
-		tr.appendChild(td);
-		fieldAllTable.appendChild(tr);
-	}
-
-	var fieldTable = document.createElement('table');
-	fieldTable.setAttribute('cellSpacing', '0px');
-
-	var fieldR = wholeRandom(256), fieldG = wholeRandom(256), fieldB = wholeRandom(256);
-	var fieldColor = 'RGB('+fieldR+','
-							+fieldG+','
-							+fieldB+')';
-	var fieldBorderColor = 'RGB('+(255-fieldR)+','
-							+(255-fieldG)+','
-							+(255-fieldB)+')';
-	for (var t=0; t<10; t++) {
-		var tr = document.createElement('tr');
-
-		for (var t1=0; t1<10; t1++) {
-			var td = document.createElement('td');
-			td.setAttribute('width', '50px');
-			td.setAttribute('height', '50px');
-			td.setAttribute('bgColor', fieldColor);
-			td.style.setProperty('border', '1px solid '+fieldBorderColor);
-
-			td.onclick = function() {
-				if (this.bgColor === fieldColor) {
-					this.setAttribute('bgColor',fieldBorderColor);
-				} else {
-					this.setAttribute('bgColor',fieldColor);
-				}
-			}
-
-			tr.appendChild(td);
-		}
-		fieldTable.appendChild(tr);
-	}
-
-	var fieldShips = document.createElement('table');
+/*	var fieldShips = document.createElement('table');
 
 	var predX, predY, curDragEl=0;
 
@@ -97,7 +45,7 @@
 			document.body.appendChild(curDragEl);
 		}
 
-		/*tr.onmousemove = function(e) {
+		tr.onmousemove = function(e) {
 			if (curDragEl === 0) {
 				return;
 			}
@@ -107,7 +55,7 @@
 
 			predX = e.clientX;
 			predY = e.clientY;
-		}*/
+		}
 
 		fieldShips.appendChild(tr);
 
@@ -119,32 +67,60 @@
 		tr.appendChild(td);
 		fieldShips.appendChild(tr);
 	}
+*/
 
-	var td = document.createElement('td');
-	td.setAttribute('colspan', '10');
-	td.setAttribute('rowspan', '10');
-	td.appendChild(fieldTable);
-	fieldAllTable.rows[1].appendChild(td);
-
-	var td = document.createElement('td');
-	td.setAttribute('rowspan', '10');
-	td.style.setProperty('width', '50px');
-	fieldAllTable.rows[1].appendChild(td);
-
-	var td = document.createElement('td');
+	
+	
+	
+	/*var td = document.createElement('td');
 	td.setAttribute('rowspan', '10');
 	td.appendChild(fieldShips);
 	fieldAllTable.rows[1].appendChild(td);
+	*/
+
+	var fieldR = wholeRandom(256), fieldG = wholeRandom(256), fieldB = wholeRandom(256);
+	var fieldColor = 'RGB('+fieldR+','
+							+fieldG+','
+							+fieldB+')';
+	var fieldBorderColor = 'RGB('+(255-fieldR)+','
+							+(255-fieldG)+','
+							+(255-fieldB)+')';
+	
+	var fieldAllTable = createField(fieldColor, fieldBorderColor, 1);
+	fieldAllTable.id = 'fieldAllTable';
+
+	var fieldOpponent = createField(fieldColor, fieldBorderColor, 2);
+	fieldOpponent.id = 'fieldOpponent';
+
+	
+	var fieldDiv = document.getElementById('fieldDiv');
+	var fieldTwoFieldsTable = document.createElement('table');
+	var tr = document.createElement('tr');
+
+
+	var td1 = document.createElement('td');
+	td1.appendChild(fieldAllTable);
+
+	var td2 = document.createElement('td');
+	td2.appendChild(fieldOpponent);
+
+	tr.appendChild(td1);
+	tr.appendChild(td2);
+
+	fieldTwoFieldsTable.appendChild(tr);
 
 	var tr = document.createElement('tr');
 	var td = document.createElement('td');
-	td.setAttribute('colspan','10');
 	td.setAttribute('align','center');
 	
+	
+
 	var button = document.createElement('button');
 	button.innerHTML = 'Save and start playing';
 
 	button.onclick = function() {
+		var fieldTable = fieldAllTable.rows[1].cells[1].children[0];
+
 		var xmlReq = new XMLHttpRequest();
 
 		xmlReq.open("POST", "setShip.php", true);
@@ -153,7 +129,8 @@
 
 		xmlReq.onreadystatechange = function() {
 			if (xmlReq.readyState === 4) {
-				console.log(xmlReq.responseText);
+				//console.log(xmlReq.responseText);
+
 			}
 		}
 
@@ -176,16 +153,114 @@
 	td.appendChild(button);
 	tr.appendChild(td);
 
+	fieldTwoFieldsTable.appendChild(tr);
+
+
+	fieldDiv.appendChild(fieldTwoFieldsTable);	
+
+	//makeTableGray(fieldOpponent.rows[1].cells[1].children[0], 0.25);
+
+	
+}
+
+function createField(fieldColor, fieldBorderColor, player) {
+	var fieldAllTable = document.createElement('table');
+
+	var tr = document.createElement('tr');
+	for (var t=0; t<11; t++) {
+		var td = document.createElement('td');
+		td.align="center"
+		td.innerHTML = ' ABCDEFGHIK'.charAt(t)
+		tr.appendChild(td);
+	}
 	fieldAllTable.appendChild(tr);
-
 	
-	var fieldDiv = document.getElementById('fieldDiv');
+	for (var t=1; t<11; t++) {
+		var tr = document.createElement('tr');
+		var td = document.createElement('td');
+		
+		td.innerHTML = t;
 
-	fieldDiv.appendChild(fieldAllTable);
+		tr.appendChild(td);
+		fieldAllTable.appendChild(tr);
+	}
 
-	
+	var fieldTable = document.createElement('table');
+	fieldTable.setAttribute('cellSpacing', '0px');
 
-	
+	for (var t=0; t<10; t++) {
+		var tr = document.createElement('tr');
+
+		for (var t1=0; t1<10; t1++) {
+			var td = document.createElement('td');
+			td.setAttribute('width', '30px');
+			td.setAttribute('height', '30px');
+			td.setAttribute('bgColor', fieldColor);
+			td.style.setProperty('border', '1px solid '+fieldBorderColor);
+			td.id = fieldAllTable.rows[0].cells[t1+1].innerHTML+
+					  fieldAllTable.rows[t+1].cells[0].innerHTML;
+
+			if (player === 1) {
+				td.onclick = function() {
+					if (this.bgColor === fieldColor) {
+						this.setAttribute('bgColor',fieldBorderColor);
+					} else {
+						this.setAttribute('bgColor',fieldColor);
+					}
+				}
+			} else {
+				td.onclick = function() {
+					var xmlReq = new XMLHttpRequest();
+
+					xmlReq.open('POST', 'getCell.php');
+
+					xmlReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+					xmlReq.onreadystatechange = function() {
+						alert(this.responseText);
+						if (this.responseText === '0') {
+							this.innerHTML = 'X';
+							this.bgColor = fieldColor;
+						} else {
+							this.innerHTML = 'O';
+						}
+					}	
+
+					xmlReq.send('cell='+this.id);	
+				}
+			}
+
+			tr.appendChild(td);
+		}
+		fieldTable.appendChild(tr);
+	}
+
+	var td = document.createElement('td');
+	td.setAttribute('colspan', '10');
+	td.setAttribute('rowspan', '10');
+	td.appendChild(fieldTable);
+	fieldAllTable.rows[1].appendChild(td);
+
+	var td = document.createElement('td');
+	td.setAttribute('rowspan', '10');
+	td.style.setProperty('width', '50px');
+	fieldAllTable.rows[1].appendChild(td);
+
+	return fieldAllTable;
+}
+
+function makeTableGray(table, clrCoef) {
+	for (var t=0; t<table.rows.length; t++) {
+		for (var t1=0; t1<table.rows[t].cells.length; t1++) {
+			var clrs = table.rows[t].cells[t1].bgColor.slice(4,-1).split(',');
+			for (var t2=0; t2<clrs.length; t++) {
+				clrs[t2]*=clrCoef;
+				clrs[t2] = Math.floor(clrs[t2]);
+			}
+
+			table.rows[t].cells[t1].bgColor = 'RGB(' + clrs.join(',') +')';
+		}
+	}
 }
 
 function wholeRandom(x) {
