@@ -40,8 +40,8 @@
 		}
 		if($gameId){
 			$mysqli->query("INSERT INTO games
-						(Id, P1, P2)
-						VALUES ('$gameId', '$curr', 'NULL')
+						(Id, P1, P2, Active)
+						VALUES ('$gameId', '$curr', 'NULL', 1)
 						");
 			$_SESSION['gameId'] = $gameId;
 		}
