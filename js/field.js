@@ -268,7 +268,7 @@ function createField(fieldColor, fieldBorderColor, player) {
 								td.bgColor = fieldBorderColor;
 							}
 
-							youtTurn = 0;
+							yourTurn = 0;
 							var timer = setInterval(function() {
 								var xmlReq = new XMLHttpRequest();
 
