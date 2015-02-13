@@ -129,7 +129,7 @@
 
 		xmlReq.onreadystatechange = function() {
 			if (xmlReq.readyState === 4) {
-				//console.log(xmlReq.responseText);
+				alert(xmlReq.responseText);
 
 			}
 		}
@@ -211,21 +211,23 @@ function createField(fieldColor, fieldBorderColor, player) {
 			} else {
 				td.onclick = function() {
 					var xmlReq = new XMLHttpRequest();
-
+					var td = this;
+					
 					xmlReq.open('POST', 'getCell.php');
 
 					xmlReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
 					xmlReq.onreadystatechange = function() {
-						alert(this.responseText);
-						if (this.responseText === '0') {
-							this.innerHTML = 'X';
-							this.bgColor = fieldColor;
-						} else {
-							this.innerHTML = 'O';
+						if (this.readyState == 4) {
+							if (this.responseText == '0') {
+								td.innerHTML = 'X';
+								td.bgColor = fieldBorderColor;
+							} else {
+								td.innerHTML = 'O';
+								td.bgColor = fieldBorderColor;
+							}
 						}
 					}	
-
 					xmlReq.send('cell='+this.id);	
 				}
 			}

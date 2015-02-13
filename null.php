@@ -1,5 +1,5 @@
 <?php
 	include "base.php";
-	nullTable("player1");
+	nullTable($_GET['table']);
 	header("Location: index.php");
 ?>

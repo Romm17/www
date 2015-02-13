@@ -27,10 +27,16 @@
 						SET A=0,B=0,C=0,D=0,E=0,F=0,G=0,H=0,I=0,K=0");
 	}
 	
-	function setShip($table, $bukva, $row){
+	function checkShip($table, $bukva, $row){
 		$mysqli = connect_db("seawar");
 		$temp = $mysqli->query("SELECT $bukva FROM player1 WHERE Num=$row")->fetch_assoc();
-		$temp[$bukva] ? $nado=0 : $nado=1; 
+		if($temp[$bukva]) return 0;
+		else return 1; 
+	}
+	
+	function setShip($table, $bukva, $row){
+		$nado = checkShip($table, $bukva, $row);
+		$mysqli = connect_db("seawar");
 		$mysqli->query("UPDATE $table
 						SET $bukva=$nado
 						WHERE Num=$row");
