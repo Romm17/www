@@ -264,7 +264,7 @@ function createField(fieldColor, fieldBorderColor, player) {
 
 					xmlReq.onreadystatechange = function() {
 						if (this.readyState == 4) {
-							if (this.responseText == '0') {
+							if (this.responseText === '0') {
 								td.innerHTML = 'X';
 								td.bgColor = fieldBorderColor;
 							} else {
@@ -286,7 +286,7 @@ function createField(fieldColor, fieldBorderColor, player) {
 											var x = 'ABCDEFGHIK'.indexOf(this.responseText.charAt(0));
 											var y = this.responseText.slice(1)-1;
 
-											youtTurn = 1;
+											yourTurn = 1;
 											var field = document.getElementById('fieldAllTable');
 											field = field.rows[1].cells[1].children[0];
 											if (field.rows[y].cells[x].bgColor === fieldColor) {
