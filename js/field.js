@@ -153,7 +153,7 @@ window.onload = function() {
 
 		xmlReq.onreadystatechange = function() {
 			if (this.readyState === 4) {
-				if (this.responseText === '0') {
+				if (this.responseText === '1') {
 					yourTurn = 0;
 					fieldMess1.innerHTML = 'Wait for the opponent';	
 				} else {
@@ -250,7 +250,10 @@ function createField(fieldColor, fieldBorderColor, player) {
 			} else {
 				td.onclick = function() {
 					if (!yourTurn)
+					{
 						alert('It isn`t tour turn! xD'); 
+						return;
+					}
 
 					var xmlReq = new XMLHttpRequest();
 					var td = this;
