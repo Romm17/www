@@ -1,4 +1,6 @@
-﻿window.onload = function() {
+﻿var yourTurn = 0;
+
+window.onload = function() {
 	
 
 /*	var fieldShips = document.createElement('table');
@@ -77,8 +79,7 @@
 	td.appendChild(fieldShips);
 	fieldAllTable.rows[1].appendChild(td);
 	*/
-	var yourTurn = 0;
-
+	
 	do
 	{
 		var fieldR = wholeRandom(128); 
