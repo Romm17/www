@@ -77,13 +77,18 @@
 	td.appendChild(fieldShips);
 	fieldAllTable.rows[1].appendChild(td);
 	*/
-
-	var fieldR = wholeRandom(256), fieldG = wholeRandom(256), fieldB = wholeRandom(256);
-	var fieldColor = 'RGB('+fieldR+','
-							+fieldG+','
+	do
+	{
+		var fieldR = wholeRandom(128); 
+		var fieldG = wholeRandom(128); 
+		var fieldB = wholeRandom(128);
+	}
+	while (Math.abs(fieldR-fieldG)<100 && Math.abs(fieldR-fieldB)<100);
+	var fieldColor = 'rgb('+fieldR+', '
+							+fieldG+', '
 							+fieldB+')';
-	var fieldBorderColor = 'RGB('+(255-fieldR)+','
-							+(255-fieldG)+','
+	var fieldBorderColor = 'rgb('+(255-fieldR)+', '
+							+(255-fieldG)+', '
 							+(255-fieldB)+')';
 	
 	var fieldAllTable = createField(fieldColor, fieldBorderColor, 1);
@@ -95,9 +100,23 @@
 	
 	var fieldDiv = document.getElementById('fieldDiv');
 	var fieldTwoFieldsTable = document.createElement('table');
+	
 	var tr = document.createElement('tr');
+	var td = document.createElement('td');
+	td.align = "center";
+	td.id = 'fieldMess1';
+	td.innerHTML = 'Locate your ships :)';
+	tr.appendChild(td);
+	var td = document.createElement('td');
+	td.id = 'fieldMess2';
+	td.align = "center";
+	td.innerHTML = '';
+	tr.appendChild(td);
+	fieldTwoFieldsTable.appendChild(tr);
 
-
+	
+	var tr = document.createElement('tr');
+	
 	var td1 = document.createElement('td');
 	td1.appendChild(fieldAllTable);
 
@@ -120,6 +139,8 @@
 
 	button.onclick = function() {
 		var fieldTable = fieldAllTable.rows[1].cells[1].children[0];
+		var fieldMess1 = document.getElementById('fieldMess1');
+		var fieldMess2 = document.getElementById('fieldMess2');
 
 		var xmlReq = new XMLHttpRequest();
 
@@ -130,7 +151,9 @@
 		xmlReq.onreadystatechange = function() {
 			if (xmlReq.readyState === 4) {
 				//console.log(xmlReq.responseText);
-
+				button.remove();
+				fieldMess1.innerHTML = '';
+				fieldMess2.innerHTML = 'Make your turn';
 			}
 		}
 
@@ -148,6 +171,7 @@
 
 		str = str.slice(0,-1);
 		xmlReq.send(str);
+
 	}
 
 	td.appendChild(button);
@@ -195,8 +219,13 @@ function createField(fieldColor, fieldBorderColor, player) {
 			var td = document.createElement('td');
 			td.setAttribute('width', '30px');
 			td.setAttribute('height', '30px');
-			td.setAttribute('bgColor', fieldColor);
-			td.style.setProperty('border', '1px solid '+fieldBorderColor);
+			if (player === 1) {
+				td.setAttribute('bgColor', fieldColor);
+				td.style.setProperty('border', '1px solid '+fieldBorderColor);
+			} else {
+				td.setAttribute('bgColor', multClr(fieldColor,1));
+				td.style.setProperty('border', '1px solid '+multClr(fieldBorderColor,1));
+			}
 			td.id = fieldAllTable.rows[0].cells[t1+1].innerHTML+
 					  fieldAllTable.rows[t+1].cells[0].innerHTML;
 
@@ -252,15 +281,23 @@ function createField(fieldColor, fieldBorderColor, player) {
 function makeTableGray(table, clrCoef) {
 	for (var t=0; t<table.rows.length; t++) {
 		for (var t1=0; t1<table.rows[t].cells.length; t1++) {
-			var clrs = table.rows[t].cells[t1].bgColor.slice(4,-1).split(',');
+			var clrs = table.rows[t].cells[t1].bgColor.slice(4,-1).split(', ');
 			for (var t2=0; t2<clrs.length; t++) {
 				clrs[t2]*=clrCoef;
 				clrs[t2] = Math.floor(clrs[t2]);
 			}
 
-			table.rows[t].cells[t1].bgColor = 'RGB(' + clrs.join(',') +')';
+			table.rows[t].cells[t1].bgColor = 'rgb(' + clrs.join(', ') +')';
 		}
 	}
+}
+
+function multClr(clrStr, coef) {
+	var clrInt = clrStr.slice(4,-1).split(', ');
+	for (var t=0; t<clrInt.length; t++) {
+		clrInt[t] = Math.floor(clrInt[t]*coef);
+	}
+	return ('rgb('+clrInt.join(', ')+')');
 }
 
 function wholeRandom(x) {
