@@ -77,6 +77,8 @@
 	td.appendChild(fieldShips);
 	fieldAllTable.rows[1].appendChild(td);
 	*/
+	var yourTurn = 0;
+
 	do
 	{
 		var fieldR = wholeRandom(128); 
@@ -149,13 +151,18 @@
 		xmlReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
 		xmlReq.onreadystatechange = function() {
-			if (xmlReq.readyState === 4) {
-				//console.log(xmlReq.responseText);
-				button.remove();
-				fieldMess1.innerHTML = '';
-				fieldMess2.innerHTML = 'Make your turn';
-				alert(xmlReq.responseText);
+			if (this.readyState === 4) {
+				if (this.responseText === '0') {
+					yourTurn = 0;
+					fieldMess1.innerHTML = 'Wait for the opponent';	
+				} else {
+					yourTurn = 1;
+					fieldMess1.innerHTML = '';
+					fieldMess2.innerHTML = 'Make your turn';
+				}
 
+				button.remove();
+				
 			}
 		}
 
@@ -241,6 +248,9 @@ function createField(fieldColor, fieldBorderColor, player) {
 				}
 			} else {
 				td.onclick = function() {
+					if (!yourTurn)
+						alert('It isn`t tour turn! xD'); 
+
 					var xmlReq = new XMLHttpRequest();
 					var td = this;
 					
@@ -257,6 +267,36 @@ function createField(fieldColor, fieldBorderColor, player) {
 								td.innerHTML = 'O';
 								td.bgColor = fieldBorderColor;
 							}
+
+							youtTurn = 0;
+							var timer = setInterval(function() {
+								var xmlReq = new XMLHttpRequest();
+
+								xmlReq.open('POST', 'getCell.php');
+
+								xmlReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+								xmlReq.onreadystatechange = function() {
+									if (this.readyState === 4) {
+										if (this.responseText !== '') {
+											var x = 'ABCDEFGHIK'.indexOf(this.responseText.charAt(0));
+											var y = this.responseText.slice(1)-1;
+
+											youtTurn = 1;
+											var field = document.getElementById('fieldAllTable');
+											field = field.rows[1].cells[1].children[0];
+											if (field.rows[y].cells[x].bgColor === fieldColor) {
+												field.rows[y].cells[x].innerHTML = 'O';
+											} else {
+												field.rows[y].cells[x].innerHTML = 'X';
+											}
+											clearInterval(timer);
+										}
+									}
+								}
+
+								xmlReq.send('');
+							}, 1000);
 						}
 					}	
 					xmlReq.send('cell='+this.id);	
