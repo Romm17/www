@@ -150,15 +150,12 @@
 
 		xmlReq.onreadystatechange = function() {
 			if (xmlReq.readyState === 4) {
-<<<<<<< HEAD
 				//console.log(xmlReq.responseText);
 				button.remove();
 				fieldMess1.innerHTML = '';
 				fieldMess2.innerHTML = 'Make your turn';
-=======
 				alert(xmlReq.responseText);
 
->>>>>>> origin/master
 			}
 		}
 
